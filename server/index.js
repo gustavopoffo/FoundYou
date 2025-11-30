@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000","*"],
     methods: ["GET", "POST", "PUT"]
   }
 });
@@ -41,11 +41,11 @@ io.on('connection', (socket) => {
   });
 });
 
-mongoose.connect('mongodb+srv://gustavopoffo:Mfvg1343@foundyou.7eorldt.mongodb.net/?retryWrites=true&w=majority&appName=FoundYou')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Conectado ao MongoDB Atlas!');
-    server.listen(3001, () => {
-      console.log('Servidor rodando na porta 3001');
+    server.listen(process.env.PORT || 3001, () => {
+      console.log('Servidor rodando na porta', process.env.PORT || 3001);
     });
   })
   .catch(err => {
