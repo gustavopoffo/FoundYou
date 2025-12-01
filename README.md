@@ -11,6 +11,13 @@ A aplicação utiliza:
 
 ---
 
+## Acesse o aplicativo
+
+Versão pública hospedada na Vercel:  
+**https://found-you.vercel.app**
+
+---
+
 ## Funcionalidades
 
 - Exibição da sua localização atual no mapa  
