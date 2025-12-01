@@ -258,40 +258,51 @@ function App() {
   // MAPA
   // ============================
   return (
-    <div className="map-container">
-      {/* SIDEBAR */}
-        <button 
-    className="sidebar-toggle"
-    onClick={() => {
-      document.querySelector(".sidebar").classList.toggle("sidebar-open");
-      document.querySelector(".sidebar-content")?.classList.toggle("sidebar-open");
-    }}
-  >
-    ☰
-  </button>
-      <div className="sidebar">
-        <Button
-          variant={showFriendSearch ? "contained" : "outlined"}
-          fullWidth sx={{ mb: 1 }}
-          onClick={() => { setShowRequests(false); setShowFriendSearch(true); }}
-        >
-          Buscar Amigos
-        </Button>
+  <div className="map-container">
 
-        <Button
-          variant={showRequests ? "contained" : "outlined"}
-          fullWidth sx={{ mb: 1 }}
-          onClick={() => { setShowFriendSearch(false); setShowRequests(true); }}
-        >
-          Solicitações ({friendRequests.length})
-        </Button>
+    {/* BOTÃO HAMBÚRGUER */}
+    <button
+      className="sidebar-toggle"
+      onClick={() => {
+        document.querySelector(".sidebar").classList.toggle("sidebar-open");
+      }}
+    >
+      ☰
+    </button>
 
-        <Button variant="outlined" color="error" fullWidth onClick={handleLogout} sx={{ mt: 2 }}>
-          Sair
-        </Button>
-      </div>
+    {/* SIDEBAR ÚNICA */}
+    <div className="sidebar">
 
-      {/* SIDEBAR CONTENT */}
+      {/* BOTÕES */}
+      <Button
+        variant={showFriendSearch ? "contained" : "outlined"}
+        fullWidth sx={{ mb: 1 }}
+        onClick={() => { setShowRequests(false); setShowFriendSearch(true); }}
+      >
+        Buscar Amigos
+      </Button>
+
+      <Button
+        variant={showRequests ? "contained" : "outlined"}
+        fullWidth sx={{ mb: 1 }}
+        onClick={() => { setShowFriendSearch(false); setShowRequests(true); }}
+      >
+        Solicitações ({friendRequests.length})
+      </Button>
+
+      <Button
+        variant="outlined"
+        color="error"
+        fullWidth
+        onClick={handleLogout}
+        sx={{ mt: 2 }}
+      >
+        Sair
+      </Button>
+
+      <hr />
+
+      {/* CONTEÚDO DINÂMICO */}
       {showFriendSearch && (
         <div className="sidebar-content">
           <Typography variant="h6">Buscar Amigos</Typography>
@@ -301,18 +312,22 @@ function App() {
             onChange={(e) => setFriendSearchUsername(e.target.value)}
             sx={{ mb: 1 }}
           />
-          <Button variant="contained" fullWidth onClick={async () => {
-            try {
-              const res = await axios.post('https://foundyou.onrender.com/api/users/send-friend-request', {
-                myUsername: username,
-                friendUsername: friendSearchUsername
-              });
-              alert(res.data.message);
-              setFriendSearchUsername('');
-            } catch (error) {
-              alert(error.response.data.message);
-            }
-          }}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={async () => {
+              try {
+                const res = await axios.post(
+                  'https://foundyou.onrender.com/api/users/send-friend-request',
+                  { myUsername: username, friendUsername: friendSearchUsername }
+                );
+                alert(res.data.message);
+                setFriendSearchUsername('');
+              } catch (error) {
+                alert(error.response.data.message);
+              }
+            }}
+          >
             Enviar Solicitação
           </Button>
         </div>
@@ -324,14 +339,21 @@ function App() {
           {friendRequests.length > 0 ? (
             <ul style={{ padding: 0, listStyle: "none" }}>
               {friendRequests.map(req => (
-                <li key={req._id} style={{ marginBottom: 10, display: "flex", justifyContent: "space-between" }}>
+                <li
+                  key={req._id}
+                  style={{ marginBottom: 10, display: "flex", justifyContent: "space-between" }}
+                >
                   <span>{req.username}</span>
                   <Button
                     variant="contained" size="small" color="success"
-                    onClick={() => axios.post('https://foundyou.onrender.com/api/users/accept-friend-request', {
-                      myUsername: username,
-                      requesterUsername: req.username
-                    }).then(fetchFriends).then(fetchFriendRequests)}
+                    onClick={() =>
+                      axios.post(
+                        'https://foundyou.onrender.com/api/users/accept-friend-request',
+                        { myUsername: username, requesterUsername: req.username }
+                      )
+                        .then(fetchFriends)
+                        .then(fetchFriendRequests)
+                    }
                   >
                     Aceitar
                   </Button>
@@ -344,37 +366,38 @@ function App() {
         </div>
       )}
 
-      {/* MAPA */}
-      <MapContainer center={position} zoom={13} style={{ height: "100vh", width: "100%" }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap'
-        />
-
-        {allUsers.map((user) =>
-          user.location?.lat ? (
-            <Marker
-              key={user._id}
-              position={[user.location.lat, user.location.lng]}
-              icon={
-                user.username === username
-                  ? userIcon
-                  : friendsUsernames.includes(user.username)
-                  ? friendIcon
-                  : otherUserIcon
-              }
-            >
-              <Popup>
-                {user.username}
-                {user.username === username && " (Você)"}
-                {friendsUsernames.includes(user.username) && " (Amigo)"}
-              </Popup>
-            </Marker>
-          ) : null
-        )}
-      </MapContainer>
     </div>
-  );
-}
 
+    {/* MAPA */}
+    <MapContainer center={position} zoom={13} style={{ height: "100vh", width: "100%" }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; OpenStreetMap'
+      />
+
+      {allUsers.map((user) =>
+        user.location?.lat ? (
+          <Marker
+            key={user._id}
+            position={[user.location.lat, user.location.lng]}
+            icon={
+              user.username === username
+                ? userIcon
+                : friendsUsernames.includes(user.username)
+                ? friendIcon
+                : otherUserIcon
+            }
+          >
+            <Popup>
+              {user.username}
+              {user.username === username && " (Você)"}
+              {friendsUsernames.includes(user.username) && " (Amigo)"}
+            </Popup>
+          </Marker>
+        ) : null
+      )}
+    </MapContainer>
+  </div>
+);
+}
 export default App;

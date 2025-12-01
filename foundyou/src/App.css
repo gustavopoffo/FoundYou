@@ -122,10 +122,9 @@ p{
   display: none;
 }
 
-/* ---- MOBILE VIEW ---- */
+/* MOBILE: tudo dentro da mesma sidebar */
 @media (max-width: 768px) {
 
-  /* Botão hambúrguer à direita */
   .sidebar-toggle {
     position: fixed;
     top: 15px;
@@ -133,7 +132,6 @@ p{
     z-index: 4000;
   }
 
-  /* Sidebar principal que desliza */
   .sidebar {
     position: fixed;
     top: 0;
@@ -143,8 +141,8 @@ p{
     background: #fff;
     padding: 20px;
     transition: right 0.3s ease;
-    overflow-y: auto;
     z-index: 3000;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -154,15 +152,11 @@ p{
     right: 0;
   }
 
-  .sidebar-content {
-    all: unset !important;     /* remove TUDO que te causou problema */
+  /* transforma sidebar-content em bloco interno */
+  .sidebar .sidebar-content {
+    all: unset !important;
     display: block !important;
     width: 100% !important;
     margin-top: 10px !important;
-  }
-
-  /* Se quiser colocar padding especificamente */
-  .sidebar-content > * {
-    margin-bottom: 10px;
   }
 }
