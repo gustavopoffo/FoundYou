@@ -109,66 +109,77 @@ p{
   color: #343434;
 }
 
-.espaco{
-  position: relative;
-  top: -10px;
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
 }
 
-
-.mobile-menu-button {
+.sidebar-toggle {
   display: none;
 }
 
-/* MOBILE */
-@media screen and (max-width: 768px) {
+/* ---- MOBILE VIEW ---- */
+@media (max-width: 768px) {
 
-  /* Botão de menu */
-  .mobile-menu-button {
-    display: block;
-    position: absolute;
+  /* Botão hambúrguer */
+  .sidebar-toggle {
+    display: flex;
+    position: fixed;
     top: 15px;
     left: 15px;
-    z-index: 2000;
+    z-index: 3000;
     background: white;
-    border: 1px solid #ccc;
-    padding: 10px 14px;
-    font-size: 22px;
+    border: 1px solid #ddd;
     border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 24px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   }
 
-  /* Esconde sidebar no mobile */
+  /* Sidebar escondida */
   .sidebar {
     position: fixed;
-    top: 70px;
-    left: -260px; /* escondida */
-    background: #ffffff;
-    z-index: 1900;
+    top: 0;
+    left: -260px;
     width: 240px;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    transition: left 0.35s ease;
+    height: 100vh;
+    background: #ffffff;
+    padding: 20px;
+    z-index: 2500;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
   }
 
   /* Sidebar aberta */
-  .sidebar.open {
-    left: 15px;
+  .sidebar.sidebar-open {
+    left: 0;
   }
 
-  /* Conteúdo */
+  /* Conteúdo da sidebar */
   .sidebar-content {
     position: fixed;
-    top: 140px;
-    left: 15px;
-    right: 15px;
-    z-index: 1900;
-    background: #fff;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    top: 0;
+    right: -100%;
+    width: 80%;
+    height: 100vh;
+    background: white;
+    padding: 20px;
+    z-index: 2600;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.15);
   }
+
+  /* Conteúdo aberto */
+  .sidebar-content.sidebar-open {
+    right: 0;
+  }
+
 }

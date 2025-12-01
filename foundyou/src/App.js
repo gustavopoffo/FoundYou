@@ -219,7 +219,9 @@ function App() {
 
         <form onSubmit={isLoggingIn ? handleLogin : handleRegister} className="login-form">
           <TextField label="Nome de usuário" value={username} onChange={(e) => setUsername(e.target.value)} required sx={{ width: 300 }} />
+          <br></br>
           <TextField label="Senha" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required sx={{ width: 300 }} />
+          <br></br>
           <Button type="submit" variant="contained" sx={{ width: 300 }}>
             {isLoggingIn ? 'Login' : 'Cadastrar'}
           </Button>
@@ -258,11 +260,15 @@ function App() {
   return (
     <div className="map-container">
       {/* SIDEBAR */}
-      <button className="mobile-menu-button" onClick={() => {
-      document.querySelector(".sidebar").classList.toggle("open");
-      }}>
-      ☰
-      </button>
+        <button 
+    className="sidebar-toggle"
+    onClick={() => {
+      document.querySelector(".sidebar").classList.toggle("sidebar-open");
+      document.querySelector(".sidebar-content")?.classList.toggle("sidebar-open");
+    }}
+  >
+    ☰
+  </button>
       <div className="sidebar">
         <Button
           variant={showFriendSearch ? "contained" : "outlined"}
