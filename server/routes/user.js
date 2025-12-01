@@ -101,25 +101,28 @@ module.exports = (io) => {
 
   router.post('/accept-friend-request', async (req, res) => {
     const { myUsername, requesterUsername } = req.body;
-    try {
-      const me = await User.findOne({ username: myUsername });
-      const requester = await User.findOne({ username: requesterUsername });
+  try {
+    const me = await User.findOne({ username: myUsername });
+    const requester = await User.findOne({ username: requesterUsername });
 
-      if (!me || !requester) {
-        return res.status(404).json({ message: 'Usuário não encontrado.' });
-      }
-
-      me.friends.push(requester._id);
-      me.friendRequests = me.friendRequests.filter(reqId => reqId.toString() !== requester._id.toString());
-      await me.save();
-      
-      requester.friends.push(me._id);
-      await requester.save();
-
-      res.status(200).json({ message: 'Amizade aceita com sucesso!' });
-    } catch (err) {
-      res.status(500).json({ message: 'Erro ao aceitar solicitação.', error: err.message });
+    if (!me || !requester) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
     }
+
+    if (!me.friends.includes(requester._id)) me.friends.push(requester._id);
+    if (!requester.friends.includes(me._id)) requester.friends.push(me._id);
+
+    me.friendRequests = me.friendRequests.filter(
+      reqId => reqId.toString() !== requester._id.toString()
+    );
+
+    await me.save();
+    await requester.save();
+
+    res.status(200).json({ message: 'Amizade aceita com sucesso!' });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao aceitar solicitação.', error: err.message });
+  }
   });
 
   router.get('/friend-requests/:username', async (req, res) => {

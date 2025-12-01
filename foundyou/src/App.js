@@ -333,38 +333,56 @@ function App() {
         </div>
       )}
 
-      {showRequests && (
-        <div className="sidebar-content">
-          <Typography variant="h6">Solicitações Recebidas</Typography>
-          {friendRequests.length > 0 ? (
-            <ul style={{ padding: 0, listStyle: "none" }}>
-              {friendRequests.map(req => (
-                <li
-                  key={req._id}
-                  style={{ marginBottom: 10, display: "flex", justifyContent: "space-between" }}
-                >
-                  <span>{req.username}</span>
-                  <Button
-                    variant="contained" size="small" color="success"
-                    onClick={() =>
-                      axios.post(
-                        'https://foundyou.onrender.com/api/users/accept-friend-request',
-                        { myUsername: username, requesterUsername: req.username }
-                      )
-                        .then(fetchFriends)
-                        .then(fetchFriendRequests)
-                    }
-                  >
-                    Aceitar
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <Typography variant="body2">Nenhuma solicitação.</Typography>
-          )}
-        </div>
-      )}
+     {showRequests && (
+  <div className="sidebar-content">
+    <Typography variant="h6">Solicitações Recebidas</Typography>
+    {friendRequests.length > 0 ? (
+      <ul style={{ padding: 0, listStyle: "none" }}>
+        {friendRequests.map(req => (
+          <li
+            key={req._id}
+            style={{ marginBottom: 10, display: "flex", justifyContent: "space-between" }}
+          >
+            <span>{req.username}</span>
+            <Button
+              variant="contained"
+              size="small"
+              color="success"
+              onClick={async () => {
+                try {
+                  // Aceita a solicitação
+                  await axios.post(
+                    'https://foundyou.onrender.com/api/users/accept-friend-request',
+                    { myUsername: username, requesterUsername: req.username }
+                  );
+
+                  // Atualiza a lista de amigos do usuário que aceitou
+                  await fetchFriends();
+
+                  // Atualiza a lista de solicitações
+                  await fetchFriendRequests();
+
+                  // Atualiza todos os usuários no mapa para os pins verdes
+                  const res = await axios.get('https://foundyou.onrender.com/api/users/all');
+                  setAllUsers(res.data);
+
+                } catch (err) {
+                  console.error(err);
+                  alert(err.response?.data?.message || 'Erro ao aceitar solicitação.');
+                }
+              }}
+            >
+              Aceitar
+            </Button>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <Typography variant="body2">Nenhuma solicitação.</Typography>
+    )}
+  </div>
+)}
+
 
     </div>
 
