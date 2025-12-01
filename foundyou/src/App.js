@@ -6,7 +6,7 @@ import { io } from 'socket.io-client';
 import axios from 'axios';
 import './App.css';
 import { TextField, Button, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+
 
 
 // Ícones
