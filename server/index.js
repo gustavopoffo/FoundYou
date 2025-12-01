@@ -9,7 +9,8 @@ const server = http.createServer(app);
 
 app.use(cors({
   origin: ["http://localhost:3000", "https://found-you.vercel.app"],
-  methods: ["GET", "POST", "PUT"]
+  methods: ["GET", "POST", "PUT"],
+  credentials: true
 }));
 
 app.use(express.json());
@@ -17,8 +18,10 @@ app.use(express.json());
 const io = new Server(server, {
   cors: {
     origin: ["http://localhost:3000", "https://found-you.vercel.app"],
-    methods: ["GET", "POST", "PUT"]
-  }
+    methods: ["GET", "POST", "PUT"],
+    credentials: true
+  },
+  transports: ["websocket", "polling"]
 });
 
 const userRoutes = require('./routes/user')(io);

@@ -163,7 +163,10 @@ function App() {
     if (!isLoggedIn) {
       return;
     }
-    const newSocket = io('https://foundyou.onrender.com');
+    const newSocket = io('https://foundyou.onrender.com', {
+      transports: ['websocket', 'polling'],
+      withCredentials: true
+    });
     setSocket(newSocket);
 
     // NOVO: Emitir o evento de login assim que a conexão for estabelecida
