@@ -6,26 +6,30 @@ const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
+
+app.use(cors({
+  origin: ["http://localhost:3000", "https://found-you.vercel.app"],
+  methods: ["GET", "POST", "PUT"]
+}));
+
+app.use(express.json());
+
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000","https://foundyou.vercel.app"],
+    origin: ["http://localhost:3000", "https://found-you.vercel.app"],
     methods: ["GET", "POST", "PUT"]
   }
 });
 
 const userRoutes = require('./routes/user')(io);
-
-app.use(cors());
-app.use(express.json());
 app.use('/api/users', userRoutes);
 
-// NOVO: Objeto para mapear usuários a IDs de socket
+// Mapeamento de usuários → socket.id
 const users = {};
 
 io.on('connection', (socket) => {
   console.log(`Usuário conectado: ${socket.id}`);
 
-  // NOVO: Ouvir o evento de login para mapear o usuário
   socket.on('user_login', (username) => {
     socket.username = username;
     users[username] = socket.id;
