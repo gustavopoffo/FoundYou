@@ -142,7 +142,7 @@ p{
   }
 
   
-  .sidebar {
+  .sidebar, .sidebar-content {
     position: fixed;
     top: 0;
     right: -260px; /* ALTERADO: antes era left */
