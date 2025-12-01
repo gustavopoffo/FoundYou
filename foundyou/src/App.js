@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 import axios from 'axios';
 import './App.css';
 import { TextField, Button, Typography } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 
 // Ícones
@@ -255,82 +256,135 @@ function App() {
   // MAPA
   // ============================
   return (
-    <div className="map-container">
-      {/* SIDEBAR */}
-      <div className="sidebar">
-        <Button
-          variant={showFriendSearch ? "contained" : "outlined"}
-          fullWidth sx={{ mb: 1 }}
-          onClick={() => { setShowRequests(false); setShowFriendSearch(true); }}
-        >
-          Buscar Amigos
-        </Button>
+     <div className="map-container">
+      {/* Botão Menu Mobile */}
+      <IconButton
+        onClick={() => setDrawerOpen(true)}
+        sx={{
+          position: "absolute",
+          top: 10,
+          left: 10,
+          background: "white",
+          zIndex: 2000,
+          boxShadow: 2,
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
 
-        <Button
-          variant={showRequests ? "contained" : "outlined"}
-          fullWidth sx={{ mb: 1 }}
-          onClick={() => { setShowFriendSearch(false); setShowRequests(true); }}
-        >
-          Solicitações ({friendRequests.length})
-        </Button>
+      {/* Drawer */}
+      <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <div style={{ width: 300, padding: 20 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Menu
+          </Typography>
 
-        <Button variant="outlined" color="error" fullWidth onClick={handleLogout} sx={{ mt: 2 }}>
-          Sair
-        </Button>
-      </div>
+          <List>
+            <ListItemButton onClick={() => setScreenMode("search")}>
+              <ListItemText primary="Buscar Amigos" />
+            </ListItemButton>
 
-      {/* SIDEBAR CONTENT */}
-      {showFriendSearch && (
-        <div className="sidebar-content">
-          <Typography variant="h6">Buscar Amigos</Typography>
-          <TextField
-            fullWidth size="small" label="Nome de usuário"
-            value={friendSearchUsername}
-            onChange={(e) => setFriendSearchUsername(e.target.value)}
-            sx={{ mb: 1 }}
-          />
-          <Button variant="contained" fullWidth onClick={async () => {
-            try {
-              const res = await axios.post('https://foundyou.onrender.com/api/users/send-friend-request', {
-                myUsername: username,
-                friendUsername: friendSearchUsername
-              });
-              alert(res.data.message);
-              setFriendSearchUsername('');
-            } catch (error) {
-              alert(error.response.data.message);
-            }
-          }}>
-            Enviar Solicitação
-          </Button>
-        </div>
-      )}
+            <ListItemButton onClick={() => setScreenMode("requests")}>
+              <ListItemText primary={`Solicitações (${friendRequests.length})`} />
+            </ListItemButton>
 
-      {showRequests && (
-        <div className="sidebar-content">
-          <Typography variant="h6">Solicitações Recebidas</Typography>
-          {friendRequests.length > 0 ? (
-            <ul style={{ padding: 0, listStyle: "none" }}>
-              {friendRequests.map(req => (
-                <li key={req._id} style={{ marginBottom: 10, display: "flex", justifyContent: "space-between" }}>
-                  <span>{req.username}</span>
-                  <Button
-                    variant="contained" size="small" color="success"
-                    onClick={() => axios.post('https://foundyou.onrender.com/api/users/accept-friend-request', {
-                      myUsername: username,
-                      requesterUsername: req.username
-                    }).then(fetchFriends).then(fetchFriendRequests)}
+            <Divider sx={{ my: 2 }} />
+
+            <ListItemButton onClick={handleLogout}>
+              <ListItemText primary="Sair" />
+            </ListItemButton>
+          </List>
+
+          <Divider sx={{ my: 2 }} />
+
+          {/* Conteúdo do Drawer */}
+          {screenMode === "search" && (
+            <>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Buscar Amigos
+              </Typography>
+
+              <TextField
+                fullWidth
+                label="Nome de usuário"
+                value={friendSearchUsername}
+                onChange={(e) =>
+                  setFriendSearchUsername(e.target.value)
+                }
+                sx={{ mb: 1 }}
+              />
+
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={async () => {
+                  try {
+                    const res = await axios.post(
+                      "https://foundyou.onrender.com/api/users/send-friend-request",
+                      {
+                        myUsername: username,
+                        friendUsername: friendSearchUsername,
+                      }
+                    );
+                    alert(res.data.message);
+                    setFriendSearchUsername("");
+                  } catch (error) {
+                    alert(error.response.data.message);
+                  }
+                }}
+              >
+                Enviar Solicitação
+              </Button>
+            </>
+          )}
+
+          {screenMode === "requests" && (
+            <>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Solicitações Recebidas
+              </Typography>
+
+              {friendRequests.length > 0 ? (
+                friendRequests.map((req) => (
+                  <div
+                    key={req._id}
+                    style={{
+                      marginBottom: 10,
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    Aceitar
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <Typography variant="body2">Nenhuma solicitação.</Typography>
+                    <span>{req.username}</span>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      color="success"
+                      onClick={() =>
+                        axios
+                          .post(
+                            "https://foundyou.onrender.com/api/users/accept-friend-request",
+                            {
+                              myUsername: username,
+                              requesterUsername: req.username,
+                            }
+                          )
+                          .then(fetchFriends)
+                          .then(fetchFriendRequests)
+                      }
+                    >
+                      Aceitar
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <Typography variant="body2">
+                  Nenhuma solicitação.
+                </Typography>
+              )}
+            </>
           )}
         </div>
-      )}
+      </Drawer>
 
       {/* MAPA */}
       <MapContainer center={position} zoom={13} style={{ height: "100vh", width: "100%" }}>
