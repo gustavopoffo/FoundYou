@@ -85,6 +85,8 @@
   margin-left: 10px;
 }
 
+
+
 .navbar{
   margin: auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
@@ -110,4 +112,63 @@ p{
 .espaco{
   position: relative;
   top: -10px;
+}
+
+
+.mobile-menu-button {
+  display: none;
+}
+
+/* MOBILE */
+@media screen and (max-width: 768px) {
+
+  /* Botão de menu */
+  .mobile-menu-button {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 2000;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    font-size: 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  /* Esconde sidebar no mobile */
+  .sidebar {
+    position: fixed;
+    top: 70px;
+    left: -260px; /* escondida */
+    background: #ffffff;
+    z-index: 1900;
+    width: 240px;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: left 0.35s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Sidebar aberta */
+  .sidebar.open {
+    left: 15px;
+  }
+
+  /* Conteúdo */
+  .sidebar-content {
+    position: fixed;
+    top: 140px;
+    left: 15px;
+    right: 15px;
+    z-index: 1900;
+    background: #fff;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
 }
