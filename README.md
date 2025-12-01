@@ -31,6 +31,19 @@ Versão pública hospedada na Vercel:
 
 ---
 
+## Tecnologias utilizadas
+
+- React
+- Leaflet
+- Express
+- Socket.IO
+- Axios
+- MongoDB Atlas
+- Render
+- Vercel
+
+---
+
 ## Como executar localmente
 
 ```bash
