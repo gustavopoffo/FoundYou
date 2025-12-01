@@ -127,57 +127,42 @@ p{
 
   /* Botão hambúrguer à direita */
   .sidebar-toggle {
-    display: flex;
     position: fixed;
     top: 15px;
     right: 15px;
     z-index: 4000;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   }
 
-  /* --- PAINEL PRINCIPAL (sidebar) --- */
+  /* Sidebar principal que desliza */
   .sidebar {
     position: fixed;
     top: 0;
-    right: -320px; 
+    right: -320px;
     width: 300px;
     height: 100vh;
-    background: #ffffff;
+    background: #fff;
     padding: 20px;
-    z-index: 3000;
     transition: right 0.3s ease;
     overflow-y: auto;
-    box-shadow: -2px 0 10px rgba(0,0,0,0.15);
-
-    /* Empilhando */
+    z-index: 3000;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
   .sidebar.sidebar-open {
-    right: 0; /* abre */
+    right: 0;
   }
 
-  /* --- AQUI ESTÁ A MÁGICA --- */
-  /* Transformar .sidebar-content em um bloco INTERNO da sidebar */
   .sidebar-content {
-    position: relative !important;
-    right: 0 !important;
-    top: 0 !important;
+    all: unset !important;     /* remove TUDO que te causou problema */
+    display: block !important;
     width: 100% !important;
-    height: auto !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    background: transparent !important;
-    z-index: unset !important;
-    transition: none !important;
+    margin-top: 10px !important;
   }
 
+  /* Se quiser colocar padding especificamente */
+  .sidebar-content > * {
+    margin-bottom: 10px;
+  }
 }
