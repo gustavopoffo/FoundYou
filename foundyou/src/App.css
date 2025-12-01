@@ -118,20 +118,6 @@ p{
   margin-top: 50px;
 }
 
-.sidebar-toggle {
-  display: flex;               /* garante que apareça */
-  position: fixed;             /* fixa no topo da tela */
-  top: 15px;
-  right: 15px;
-  z-index: 5000;               /* acima de tudo */
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
 
 /* MOBILE: tudo dentro da mesma sidebar */
 @media (max-width: 768px) {
