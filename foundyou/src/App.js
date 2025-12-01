@@ -35,7 +35,7 @@ const otherUserIcon = new L.Icon({
 });
 
 const sendLocationToServer = (username, lat, lng) => {
-  axios.put('http://foundyou.onrender.com/api/users/update-location', { username, lat, lng })
+  axios.put('https://foundyou.onrender.com/api/users/update-location', { username, lat, lng })
     .then(response => {
       console.log("Localização enviada com sucesso:", response.data);
     })
@@ -65,7 +65,7 @@ function App() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://foundyou.onrender.com/api/users/register', { username, password });
+      const response = await axios.post('https://foundyou.onrender.com/api/users/register', { username, password });
       console.log(response.data);
       alert('Cadastro concluído! Agora faça o login.');
       setIsLoggingIn(true);
@@ -78,7 +78,7 @@ function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://foundyou.onrender.com/api/users/login', { username, password });
+      const response = await axios.post('https://foundyou.onrender.com/api/users/login', { username, password });
       console.log(response.data);
       setIsLoggedIn(true);
       setRegisterError('');
@@ -104,7 +104,7 @@ function App() {
 
   const handleSendFriendRequest = async () => {
     try {
-      const response = await axios.post('http://foundyou.onrender.com/api/users/send-friend-request', {
+      const response = await axios.post('https://foundyou.onrender.com/api/users/send-friend-request', {
         myUsername: username,
         friendUsername: friendSearchUsername
       });
@@ -118,7 +118,7 @@ function App() {
 
   const handleAcceptFriendRequest = async (requesterUsername) => {
     try {
-      const response = await axios.post('http://foundyou.onrender.com/api/users/accept-friend-request', {
+      const response = await axios.post('https://foundyou.onrender.com/api/users/accept-friend-request', {
         myUsername: username,
         requesterUsername: requesterUsername,
       });
@@ -133,7 +133,7 @@ function App() {
 
   const fetchFriendRequests = useCallback(async () => {
     try {
-      const response = await axios.get(`http://foundyou.onrender.com/api/users/friend-requests/${username}`);
+      const response = await axios.get(`https://foundyou.onrender.com/api/users/friend-requests/${username}`);
       setFriendRequests(response.data);
     } catch (error) {
       console.error("Erro ao buscar solicitações de amizade:", error);
@@ -142,7 +142,7 @@ function App() {
 
   const fetchFriends = useCallback(async () => {
     try {
-      const response = await axios.get(`http://foundyou.onrender.com/api/users/friends/${username}`);
+      const response = await axios.get(`https://foundyou.onrender.com/api/users/friends/${username}`);
       const friendsList = response.data.map(friend => friend.username);
       setFriendsUsernames(friendsList);
     } catch (error) {
@@ -163,7 +163,7 @@ function App() {
     if (!isLoggedIn) {
       return;
     }
-    const newSocket = io('http://foundyou.onrender.com');
+    const newSocket = io('https://foundyou.onrender.com');
     setSocket(newSocket);
 
     // NOVO: Emitir o evento de login assim que a conexão for estabelecida
@@ -192,7 +192,7 @@ function App() {
     fetchFriends();
     fetchFriendRequests();
 
-    axios.get('http://foundyou.onrender.com/api/users/all')
+    axios.get('https://foundyou.onrender.com/api/users/all')
       .then(response => {
         setAllUsers(response.data);
       })
