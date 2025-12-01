@@ -64,7 +64,7 @@ cd server
 npm install
 
 ### Execute o backend
-npm start
+node index.js
 
 ### Execute o frontend
 npm start
